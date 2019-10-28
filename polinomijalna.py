@@ -24,19 +24,19 @@ for i in range(1, 6):
     print('PREDICTORS ', predictors)
     if 1 < i < 5:
         for j in range(1, 6):  # first col is all ones
-            for k in range(j + 1, 6):
+            for k in range(j, 6):
                 if i == 2:
                     X = np.c_[X, (X[:, j] * X[:, k])]
                     predictors = predictors + 1
                     print('x', j, ' x', k)
                 else:
-                    for l in range(k + 1, 6):
+                    for l in range(k, 6):
                         if i == 3:
                             predictors = predictors + 1
                             print('x', j, ' x', k, 'x', l)
                             X = np.c_[X, (X[:, j] * X[:, k] * X[:, l])]
                         else:
-                            for m in range(l + 1, 6):
+                            for m in range(l, 6):
                                 if i == 4:
                                     predictors = predictors + 1
                                     print('x', j, ' x', k, 'x', l, 'x', m)
