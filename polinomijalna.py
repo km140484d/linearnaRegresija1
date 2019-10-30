@@ -93,19 +93,26 @@ lam_opt = lam[J_min_index]
 # plt.legend()
 # plt.show()
 
-tau = np.linspace(0.1, 5, 5)
-xa = np.repeat([X_test[0]], repeats=len(X_train), axis=0)
+tau = np.linspace(0.1, 5, 10)
+J_pond_arr = []
 for t in tau:
-    for x in X_test:
-        Xi = np.repeat([x], repeats=len(X_train), axis=0)
+    J = 0
+    for xi in range(len(X_test)):
         exp = []
         for i in range(len(X_train)):
-            exp.append(math.e**(-np.linalg.norm(Xi[i] - X_train[i])**2/(2*t**2)))
+            exp.append(math.e**(-np.linalg.norm(X_test[xi] - X_train[i])**2/(2*t**2)))
         W = np.diag(exp)
-        # theta = np.linalg.inv(X_test.T.dot(W).dot(X_test)).dot(X_test).T.dot(W).dot(Y_test)
-        # print('theta', theta)
-        # print('W', W)
-        exit(0)
+        theta = np.linalg.inv(X_train.T.dot(W).dot(X_train)).dot(X_train.T).dot(W).dot(Y_train)
+        J = J + (Y[xi]-X[xi].dot(theta))**2
+    J_pond_arr.append(J/Y.shape[0])
 
+J_min_index = J_pond_arr.index(min(J_pond_arr))
+tau_opt = tau[J_min_index]
+theta_opt = tau[J_min_index]
+print('J_pond_arr', J_pond_arr)
+print('tau', tau_opt)
+plt.plot(tau, J_pond_arr, label='local segmented')
+plt.legend()
+plt.show()
 
 # prvi model obican, drugi: x1^2, x2^2..., treci: x1^3, x2^3
