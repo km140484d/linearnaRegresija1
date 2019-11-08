@@ -4,23 +4,7 @@ import pandas as pd
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-#
-# def predict(matrix):
-#     X = matrix.to_numpy()
-#     X = np.c_[np.ones((len(X), 1)), X]
-#     print(X)
-#     for i in range(2, 3):
-#         if 1 < i < 5:
-#             for j in range(1, 6):  # first col is all ones
-#                 for k in range(j, 6):
-#                     if i == 2:
-#                         X = np.c_[X, (X[:, j] * X[:, k])]
-#                     else:
-#                         for l in range(k, 6):
-#                             X = np.c_[X, (X[:, j] * X[:, k] * X[:, l])]
-#
-#
-#     ;
+
 
 df = pd.read_csv('data.csv', header=None)
 df.columns = ['x1', 'x2', 'x3', 'x4', 'x5', 'y']
@@ -28,8 +12,7 @@ df.insert(0, 'one', 1)
 df = df.sample(frac=1)
 
 boundary_index = round(df.shape[0] * 0.8)       # uzeto je da je 80% skup za treniranje, a 20% skup za testiranje
-X = df.iloc[:, 0:6].to_numpy()
-Y = df['y'].to_numpy()
+X, Y = df.iloc[:, 0:6].to_numpy(), df['y'].to_numpy()
 
 # polinomijalna regresija
 predictors = 5                                  # inicijalan broj prediktora 5 + 1 (kolona sa 1)
@@ -53,14 +36,11 @@ for i in range(1, 6):
                                     X = np.c_[X, (X[:, j] * X[:, k] * X[:, l] * X[:, m])]
                                     predictors = predictors + 1
     predictors_arr.append(predictors)
-
     X_train, Y_train = X[0:boundary_index], Y[0:boundary_index]
     X_test, Y_test = X[boundary_index:df.shape[0]], Y[boundary_index:df.shape[0]]
-
     theta = np.linalg.inv((X_train.T.dot(X_train))).dot(X_train.T).dot(Y_train)
     theta_arr.append(theta)
     J_arr.append((Y - X.dot(theta)).T.dot(Y - X.dot(theta)) / Y.shape[0])
-
 J_min_index = J_arr.index(min(J_arr))
 print('Polinomijalna, min(J):', J_arr[J_min_index])
 print('predictor_number_opt:', predictors_arr[J_min_index])
